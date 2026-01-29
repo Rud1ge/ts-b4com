@@ -1,0 +1,38 @@
+services:
+  dut:
+    image: python:3.11-slim
+    container_name: dut
+    privileged: true
+    networks:
+      tg:
+        ipv4_address: 192.0.2.2
+      link1:
+        ipv4_address: 10.0.1.2
+      link2:
+        ipv4_address: 10.0.2.2
+      link3:
+        ipv4_address: 10.0.3.2
+    # sleep infinity - чтобы контейнер остался запущенным
+    command: [ "sh", "-c", "apt-get update && sleep infinity" ]
+
+networks:
+  tg:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.0.2.0/24
+  link1:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  link2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+  link3:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.3.0/24
