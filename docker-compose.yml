@@ -8,6 +8,15 @@ services:
       net:
         ipv4_address: 198.168.0.2
 
+  tg:
+    image: python:alpine3.23
+    container_name: tg
+    privileged: true
+    command: ["sh", "-c", "sleep infinity"]
+    networks:
+      net:
+        ipv4_address: 198.168.0.3
+
 networks:
   net:
     driver: bridge
