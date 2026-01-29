@@ -3,9 +3,9 @@ LABEL authors="rudig"
 
 WORKDIR /app
 
-RUN apk add --no-cache tcpdump
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache tcpdump
 
 COPY . .
 
