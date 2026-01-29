@@ -1,9 +1,9 @@
 services:
   dut:
-    image: python:3.14.2-alpine
+    build: ./
     container_name: dut
     privileged: true
-    command: ["sh", "-c", "sleep infinity"]
+    command: [ "sh", "-c", "sleep infinity" ]
     networks:
       net:
         ipv4_address: 192.168.0.2
@@ -12,7 +12,7 @@ services:
     build: ./
     container_name: tg
     privileged: true
-    command: ["sh", "-c", "sleep infinity"]
+    command: [ "sh", "-c", "sleep infinity" ]
     networks:
       net:
         ipv4_address: 192.168.0.3
