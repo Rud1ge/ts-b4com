@@ -8,3 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install -y --no-install-recommends iproute2 libpcap-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY . .
+
+CMD ["sh","-c","ip route replace default via 192.168.0.2 && sleep infinity"]
