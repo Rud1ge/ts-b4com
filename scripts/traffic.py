@@ -11,9 +11,8 @@ def generate_and_send():
         )
         packets.append(pkt)
 
-    print("Началась отправка случайных UDP-пакетов", flush=True)
     send(packets, inter=0, iface=None)
-    print("Закончилась отправка случайных UDP-пакетов", flush=True)
+    print("Информация: Закончилась отправка случайных UDP-пакетов")
 
 
 if __name__ == "__main__":
