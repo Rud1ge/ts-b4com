@@ -19,7 +19,6 @@ services:
       dockerfile: Dockerfile.tg
     container_name: Traffic-Generator
     privileged: true
-    command: [ "sh","-c","ip route replace default via 192.168.0.2 && sleep infinity" ]
     networks:
       net:
         ipv4_address: 192.168.0.3
