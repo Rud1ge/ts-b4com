@@ -13,4 +13,4 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
-CMD ["sh", "-c", "ip route replace default via 192.168.0.2 && sleep infinity"]
+CMD ["sh", "-c", "/app/scripts/configure_tg.sh && sleep infinity"]

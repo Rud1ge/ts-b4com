@@ -1,9 +1,13 @@
 FROM python:3.14.2-slim
 LABEL authors="rudig"
 
+WORKDIR /app
+
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends tcpdump iproute2
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
-CMD ["sh", "-c", "ip link add name lo1 type dummy && ip addr add 172.16.0.254/32 dev lo1 && ip link set lo1 up && sleep infinity"]
+COPY scripts/configure_nexthop.sh /app/scripts/configure_nexthop.sh
+
+CMD ["sh", "-c", "/app/scripts/configure_nexthop.sh && sleep infinity"]
