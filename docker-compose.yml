@@ -2,7 +2,7 @@ services:
   dut:
     build:
       context: .
-      dockerfile: Dockerfile.dut
+      dockerfile: images/Dockerfile.dut
     container_name: Device-Under-Test
     privileged: true
     networks:
@@ -16,7 +16,7 @@ services:
   tg:
     build:
       context: .
-      dockerfile: Dockerfile.tg
+      dockerfile: images/Dockerfile.tg
     container_name: Traffic-Generator
     privileged: true
     networks:
@@ -26,8 +26,10 @@ services:
   nexthop_1:
     build:
       context: .
-      dockerfile: Dockerfile.nexthop
+      dockerfile: images/Dockerfile.nexthop
     container_name: Nexthop-1
+    volumes:
+      - ./pcaps:/pcaps
     privileged: true
     networks:
       nexthop1:
@@ -36,8 +38,10 @@ services:
   nexthop_2:
     build:
       context: .
-      dockerfile: Dockerfile.nexthop
+      dockerfile: images/Dockerfile.nexthop
     container_name: Nexthop-2
+    volumes:
+      - ./pcaps:/pcaps
     privileged: true
     networks:
       nexthop2:
