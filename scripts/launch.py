@@ -66,10 +66,10 @@ async def stop_topology():
 
 
 def analyze_pcaps(ts: str):
-    console.print("[bold]Этап 5. Разбор дампов (pcap).[/bold]")
+    console.print("[bold]Этап 5. Разбор дампов трафика.[/bold]")
 
     table = Table(
-        title=f"UDP -> 172.16.0.254, разбор на nexthop'ах ({ts})",
+        title=f"UDP -> 172.16.0.254, разбор на конечных точках ({ts})",
         title_justify="left",
         show_lines=False,
         header_style="bold",
