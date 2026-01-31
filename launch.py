@@ -1,11 +1,10 @@
 import asyncio
 import subprocess
 from datetime import datetime
-from pathlib import Path
 
 from rich.console import Console
-from rich.table import Table
-from scapy.all import PcapReader, IP, UDP
+
+from scripts.analyze import analyze_pcaps
 
 console = Console()
 
@@ -65,45 +64,9 @@ async def stop_topology():
     await run_command("docker", "compose", "down", "--remove-orphans")
 
 
-def analyze_pcaps(ts: str):
+def run_analysis(ts: str):
     console.print("[bold]Этап 5. Разбор дампов трафика.[/bold]")
-
-    table = Table(
-        title=f"UDP -> 172.16.0.254, разбор на конечных точках ({ts})",
-        title_justify="left",
-        show_lines=False,
-        header_style="bold",
-    )
-    table.add_column("Контейнер", no_wrap=True)
-    table.add_column("Файл дампа", overflow="fold")
-    table.add_column("UDP пакеты", justify="right")
-    table.add_column("Уникальных src UDP пакетов", justify="right")
-
-    total_src = set()
-    total_pkts = 0
-
-    for nexthop in NEXTHOPS:
-        pcap_file = Path("pcaps") / f"{nexthop}_{ts}.pcap"
-        unique_src = set()
-        packets = 0
-
-        with PcapReader(str(pcap_file)) as pcap:
-            for pkt in pcap:
-                ip = pkt.getlayer(IP)
-                if not ip or ip.dst != "172.16.0.254" or not pkt.haslayer(UDP):
-                    continue
-                packets += 1
-                unique_src.add(ip.src)
-
-        total_pkts += packets
-        total_src |= unique_src
-
-        table.add_row(nexthop, str(pcap_file), str(packets), str(len(unique_src)))
-
-    table.add_section()
-    table.add_row("[bold]Итого[/bold]", "", f"[bold]{total_pkts}[/bold]", f"[bold]{len(total_src)}[/bold]")
-
-    console.print(table)
+    analyze_pcaps(ts, NEXTHOPS)
 
 
 async def start():
@@ -112,7 +75,7 @@ async def start():
         ts = await start_capture()
         await generate_traffic()
         await stop_capture()
-        analyze_pcaps(ts)
+        run_analysis(ts)
     finally:
         await stop_topology()
 
