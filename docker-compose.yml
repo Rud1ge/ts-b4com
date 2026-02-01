@@ -12,6 +12,10 @@ services:
         ipv4_address: 10.0.1.2
       nexthop2:
         ipv4_address: 10.0.2.2
+      nexthop3:
+        ipv4_address: 10.0.3.2
+      nexthop4:
+        ipv4_address: 10.0.4.2
 
   tg:
     build:
@@ -47,6 +51,30 @@ services:
       nexthop2:
         ipv4_address: 10.0.2.3
 
+  nexthop_3:
+    build:
+      context: .
+      dockerfile: images/Dockerfile.nexthop
+    container_name: Nexthop-3
+    volumes:
+      - ./pcaps:/pcaps
+    privileged: true
+    networks:
+      nexthop3:
+        ipv4_address: 10.0.3.3
+
+  nexthop_4:
+    build:
+      context: .
+      dockerfile: images/Dockerfile.nexthop
+    container_name: Nexthop-4
+    volumes:
+      - ./pcaps:/pcaps
+    privileged: true
+    networks:
+      nexthop4:
+        ipv4_address: 10.0.4.3
+
 networks:
   net:
     driver: bridge
@@ -63,3 +91,13 @@ networks:
     ipam:
       config:
         - subnet: 10.0.2.0/24
+  nexthop3:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.3.0/24
+  nexthop4:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.4.0/24

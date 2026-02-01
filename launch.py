@@ -8,7 +8,7 @@ from scripts.analyze import analyze_pcaps
 
 console = Console()
 
-NEXTHOPS = ["Nexthop-1", "Nexthop-2"]
+NEXTHOPS = ["Nexthop-1", "Nexthop-2", "Nexthop-3", "Nexthop-4"]
 
 
 async def run_command(*args):
