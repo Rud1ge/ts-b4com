@@ -15,8 +15,8 @@ PORT_VARIANTS = 64
 PAYLOAD = Raw(load=("ECMP Hash Testing for b4com" * 64).encode())
 
 
-def random_packets(n=PACKETS):
-    for i in range(n):
+def random_packets(packets=PACKETS):
+    for i in range(packets):
         yield IP(dst=DEST, src=RandIP()) / UDP(sport=SPORT, dport=DPORT) / PAYLOAD
 
 
