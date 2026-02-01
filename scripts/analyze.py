@@ -128,7 +128,7 @@ def analyze_hash_only_by_source(timestamp, nexthops, test_name="hash-only-source
     offenders = {src: hops for src, hops in src_to_hops.items() if len(hops) > 1}
 
     if offenders:
-        console.print("[red][bold]FAIL[/bold]: Source IP распределяется по нескольким nexthop.[/red]")
+        console.print("[red][bold]FAIL[/bold]: Source IP распределяется по нескольким nexthop-ам.[/red]")
         for src, hops in sorted(offenders.items()):
             console.print(f"{src} -> {', '.join(sorted(hops))}")
         return False
