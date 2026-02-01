@@ -1,20 +1,35 @@
 from scapy.all import IP, UDP, Raw, RandIP, send
+from scapy.volatile import RandShort
 
-SPORT = 12345
-DPORT = 54321
+DEST = "172.16.0.254"
+IFACE = "eth0"
+INTER = 0.01
+
 PACKETS = 1024
+SPORT, DPORT = 12345, 54321
+
+OCTET = 100
+FIXED_SOURCES = 16
+PORT_VARIANTS = 64
+
+PAYLOAD = Raw(load=("ECMP Hash Testing for b4com" * 64).encode())
 
 
-def generate_and_send():
-    packets = []
-    payload = Raw(load=("ECMP Hash Testing for b4com" * 64).encode())
-
-    for packet in range(PACKETS):
-        pkt = IP(dst="172.16.0.254", src=RandIP()) / UDP(sport=SPORT, dport=DPORT) / payload
-        packets.append(pkt)
-
-    send(packets, inter=0.01, iface="eth0", verbose=False)
+def random_packets(n=PACKETS):
+    for i in range(n):
+        yield IP(dst=DEST, src=RandIP()) / UDP(sport=SPORT, dport=DPORT) / PAYLOAD
 
 
-if __name__ == "__main__":
-    generate_and_send()
+def fixed_packets(sources=FIXED_SOURCES, variants=PORT_VARIANTS, start=OCTET):
+    for i in range(sources):
+        src = f"198.51.100.{start + i}"
+        for j in range(variants):
+            yield IP(dst=DEST, src=src) / UDP(sport=RandShort(), dport=RandShort()) / PAYLOAD
+
+
+def send_random_sources():
+    send(list(random_packets()), inter=INTER, iface=IFACE, verbose=False)
+
+
+def send_fixed_sources(variants=PORT_VARIANTS):
+    send(list(fixed_packets(variants=variants)), inter=INTER, iface=IFACE, verbose=False)
