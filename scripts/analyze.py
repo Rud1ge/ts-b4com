@@ -88,7 +88,7 @@ def analyze_distribution(timestamp, nexthops, max_deviation_percent, test_name="
     print_table(f"ECMP распределение по Source IP ({timestamp})", rows, total_udp, total_unique)
 
     if total_unique == 0:
-        console.print("[red]FAIL: не найдено ни одного UDP пакета.[/red]")
+        console.print("[red][bold]FAIL[/bold]: не найдено ни одного UDP пакета.[/red]")
         return False
 
     expected = 100.0 / len(nexthops)
@@ -98,13 +98,13 @@ def analyze_distribution(timestamp, nexthops, max_deviation_percent, test_name="
         share = len(row["sources"]) / total_unique * 100.0
         worst = max(worst, abs(share - expected))
 
-    console.print(f"Фактическое отклонение: {worst:.1f}%.")
+    console.print(f"[cyan]INFO[/cyan]: фактическое отклонение: {worst:.1f}%.")
 
     if worst <= max_deviation_percent:
-        console.print("[green][bold]PASS[/bold]: распределение по Source IP в пределах допуска.[/green]")
+        console.print("[green][bold]PASS[/bold]: распределение ECMP по случайным Source IP в пределах допуска.[/green]")
         return True
 
-    console.print("[red][bold]FAIL[/bold]: распределение по Source IP выходит за пределы допуска.[/red]")
+    console.print("[red][bold]FAIL[/bold]: распределение ECMP по случайным Source IP выходит за пределы допуска.[/red]")
     return False
 
 
@@ -128,10 +128,11 @@ def analyze_hash_only_by_source(timestamp, nexthops, test_name="hash-only-source
     offenders = {src: hops for src, hops in src_to_hops.items() if len(hops) > 1}
 
     if offenders:
-        console.print("[red][bold]FAIL[/bold]: Source IP распределяется по нескольким nexthop-ам.[/red]")
+        console.print("[red][bold]FAIL[/bold]: Source IP распределяется по нескольким nexthop.[/red]")
         for src, hops in sorted(offenders.items()):
-            console.print(f"{src} -> {', '.join(sorted(hops))}")
+            console.print(f"[cyan]INFO[/cyan]: {src} -> {', '.join(sorted(hops))}")
         return False
 
-    console.print("[green][bold]PASS[/bold]: hash только по Source IP (один Source IP -> один nexthop).[/green]")
+    console.print(
+        "[green][bold]PASS[/bold]: распределение ECMP только по Source IP (один Source IP на один nexthop).[/green]")
     return True
