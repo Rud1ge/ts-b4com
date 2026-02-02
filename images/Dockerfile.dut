@@ -10,4 +10,4 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY scripts/configure_dut.sh /app/scripts/configure_dut.sh
 
-CMD ["sh", "-c", "/app/scripts/configure_dut.sh && sleep infinity"]
+CMD ["sh", "-c", "sh /app/scripts/configure_dut.sh && sleep infinity"]

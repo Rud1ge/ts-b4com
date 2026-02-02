@@ -13,4 +13,4 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
-CMD ["sh", "-c", "/app/scripts/configure_tg.sh && sleep infinity"]
+CMD ["sh", "-c", "sh /app/scripts/configure_tg.sh && sleep infinity"]
